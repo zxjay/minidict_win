@@ -14,8 +14,6 @@ namespace MiniDict
     {
         private Result resultForm = null;
         List<string> dict = new List<string>();
-        string last = string.Empty;
-        int queryCount = 0;
 
         [DllImport("User32.DLL")]
         public static extern int SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
@@ -183,24 +181,8 @@ namespace MiniDict
                     }
                 }
 
-                if (txt == last)
-                {
-                    if (queryCount > 2)
-                    {
-                        resultForm.Go("http://www.bing.com/dict/search?q=" + HttpUtility.UrlEncode(txt, Encoding.UTF8));
-                        queryCount = 1;
-                    }
-                    else
-                    {
-                        queryCount++;
-                    }
-                }
-                else
-                {
-                    last = txt;
-                    queryCount = 1;
-                    resultForm.Go("http://www.bing.com/dict/search?q=" + HttpUtility.UrlEncode(txt, Encoding.UTF8));
-                }
+                String queryUrl = String.Format("https://www.bing.com/dict/search?q={0}&FORM=BDVSP6&cc=cn", HttpUtility.UrlEncode(txt, Encoding.UTF8));
+                resultForm.Go(queryUrl);
 
                 resultForm.Left = this.Left;
                 resultForm.Top = this.Top + this.Height;
